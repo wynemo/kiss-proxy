@@ -58,8 +58,7 @@ class Encoder(StreamRequestHandler):
                     first_line = data[:pos]
                 else:
                     data += sock.recv(64 * 1024)
-            old_pos = pos + 2
-            first_line_end = old_pos
+            first_line_end = pos + 2
 
             method, url, version = first_line.strip().split(' ')
             import re
