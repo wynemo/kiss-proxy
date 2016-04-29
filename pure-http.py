@@ -47,7 +47,6 @@ class Encoder(StreamRequestHandler):
         try:
             sock = self.connection
             first_line = ''
-            pos = 0
             data = sock.recv(64 * 1024)
             if not data:
                 raise Exception('hey no data, don\'t  fuck with me')
@@ -58,30 +57,20 @@ class Encoder(StreamRequestHandler):
                     first_line = data[:pos]
                 else:
                     data += sock.recv(64 * 1024)
-            first_line_end = pos + 2
 
             method, url, version = first_line.strip().split(' ')
+            logging.info(first_line)
             import re
 
             if method.upper() != 'CONNECT':
                 ss = urlparse.urlsplit(url)
-                path = ss.path
                 port = ss.port or 80
-                if ss.query:
-                    path += '?' + ss.query
-                if ss.fragment:
-                    path += '#' + ss.fragment
-                if not path:
-                    path = '/'
                 host = ss.hostname
             else:
                 host, port = url.split(':')
                 port = int(port)
-                path = ''
 
-            modified_first_line = ' '.join([method, path, version])
-            modified_data = modified_first_line + CRLF + data[first_line_end:]
-            modified_data = modified_data.replace('Proxy-Connection: keep-alive\r\n', 'Connection: keep-alive\r\n', 1)
+            modified_data = data.replace('Proxy-Connection: keep-alive\r\n', 'Connection: keep-alive\r\n', 1)
             remote = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             if method.upper() == 'CONNECT':
                 resp = CRLF.join(['HTTP/1.1 200 Connection established',
