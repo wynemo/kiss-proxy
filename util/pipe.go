@@ -37,15 +37,11 @@ type Foo struct {
 type change func(conn net.Conn, data []byte) (Foo, error)
 
 //Pipe pipe too connections
-func Pipe(conn1 net.Conn, conn2 net.Conn, keepLive1 bool, keepLive2 bool, xx int, fn change) []byte{
+func Pipe(conn1 net.Conn, conn2 net.Conn) []byte{
 	chan1 := chanFromConn(conn1)
 	chan2 := chanFromConn(conn2)
 	closed1 := false
 	closed2 := false
-	connHasSent2 := false
-	connHasSent1 := false
-
-	//xx := rand.Intn(10000)
 
 	for {
 		select {
@@ -53,27 +49,47 @@ func Pipe(conn1 net.Conn, conn2 net.Conn, keepLive1 bool, keepLive2 bool, xx int
 			if b1 == nil {
 				conn2.Close()
 				closed2 = true
-				//fmt.Println(xx, "close2 true")
 			} else {
-				//fmt.Println(xx, "conn1 sent", len(b1))
-				if (keepLive1 && connHasSent2) {
-					return b1
-				}
 				conn2.Write(b1)
-				if (keepLive2) {
-					//fmt.Println(xx, "has sent to true")
-					connHasSent1 = true
-				}
 			}
 		case b2 := <-chan2:
 			if b2 == nil {
 				conn1.Close()
 				closed1 = true
-				//fmt.Println(xx, "close1 true")
 			} else {
-				//fmt.Println(xx, "conn2 sent", len(b2))
-				if (keepLive2 && connHasSent1) {
-					//fmt.Println(xx, "return b2")
+				conn1.Write(b2)
+			}
+		}
+		if closed1 && closed2 {
+			return nil
+		}
+	}
+}
+
+//Pipe pipe too connections
+func PipeAndChangeLater(conn1 net.Conn, conn2 net.Conn, fn change) []byte{
+	chan1 := chanFromConn(conn1)
+	chan2 := chanFromConn(conn2)
+	closed1 := false
+	closed2 := false
+	connHasSent1 := false
+
+	for {
+		select {
+		case b1 := <-chan1:
+			if b1 == nil {
+				conn2.Close()
+				closed2 = true
+			} else {
+				conn2.Write(b1)
+				connHasSent1 = true
+			}
+		case b2 := <-chan2:
+			if b2 == nil {
+				conn1.Close()
+				closed1 = true
+			} else {
+				if (connHasSent1) {
 					foo, err := fn(conn2, b2)
 					if err != nil {
 						conn2.Close()
@@ -84,12 +100,8 @@ func Pipe(conn1 net.Conn, conn2 net.Conn, keepLive1 bool, keepLive2 bool, xx int
 					}
 					connHasSent1 = false
 					b2 = foo.Data
-					//return b2
 				}
 				conn1.Write(b2)
-				if (keepLive1) {
-					connHasSent2 = true
-				}
 			}
 		}
 		if closed1 && closed2 {

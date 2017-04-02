@@ -128,8 +128,8 @@ func handleConnection(conn net.Conn) {
 
 	if strings.ToUpper(foo.Method) != "CONNECT" {
 		remote.Write(foo.Data)
-		util.Pipe(remote, conn, false, true, i, changeFirstLine)
+		util.PipeAndChangeLater(remote, conn, changeFirstLine)
 	} else {
-		util.Pipe(remote, conn, false, false, 0, nil)
+		util.Pipe(remote, conn)
 	}
 }
