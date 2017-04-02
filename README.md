@@ -5,7 +5,7 @@ it supports [HTTP tunnel](https://en.wikipedia.org/wiki/HTTP_tunnel), and [HTTP 
 
 ```bash
 go get github.com/wynemo/kiss-proxy/httpproxy
-$GOPATH/bin/httpproxy
+$GOPATH/bin/httpproxy &
 export http_proxy=http://127.0.0.1:8118
 ```
 
