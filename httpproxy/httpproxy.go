@@ -9,7 +9,6 @@ import (
 	"os"
 	"strings"
 	"errors"
-	"math/rand"
 	"github.com/wynemo/kiss-proxy/util"
 )
 
@@ -124,7 +123,6 @@ func handleConnection(conn net.Conn) {
 	}
 
 	defer remote.Close()
-	i := rand.Intn(10000)
 
 	if strings.ToUpper(foo.Method) != "CONNECT" {
 		remote.Write(foo.Data)
