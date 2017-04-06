@@ -18,3 +18,6 @@ r = session.get('http://dabin.info/static/')
 r = session.get('http://dabin.info/')
 r = session.get('http://dabin.info/?page=2')
 ```
+
+
+TODO: handle http 101 status
