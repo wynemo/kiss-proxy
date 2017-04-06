@@ -20,4 +20,4 @@ r = session.get('http://dabin.info/?page=2')
 ```
 
 
-TODO: handle http 101 status
+TODO: handle http 100 status
