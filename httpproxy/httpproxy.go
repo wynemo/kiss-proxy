@@ -14,7 +14,7 @@ import (
 
 
 func main() {
-	l, err := net.Listen("tcp4", "127.0.0.1:8118")
+	l, err := net.Listen("tcp4", "0.0.0.0:8118")
 	if err != nil {
 		fmt.Println("listen error", err.Error())
 		os.Exit(1)
