@@ -118,8 +118,7 @@ func handleConnection(conn net.Conn) {
 	log.Println("host", host)
 	remote, err := net.Dial("tcp4", host)
 	if err != nil {
-		fmt.Println("can't connect to remote")
-		fmt.Println(err)
+		fmt.Println("can't connect to remote", err)
 		return
 	}
 
