@@ -2,16 +2,15 @@ package main
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
+	"github.com/wynemo/kiss-proxy/util"
 	"log"
 	"net"
 	"net/url"
 	"os"
 	"strings"
-	"errors"
-	"github.com/wynemo/kiss-proxy/util"
 )
-
 
 func main() {
 	l, err := net.Listen("tcp4", "0.0.0.0:8118")
@@ -28,7 +27,6 @@ func main() {
 		go handleConnection(conn)
 	}
 }
-
 
 func changeFirstLine(conn net.Conn, data []byte) (util.Foo, error) {
 	var pos int
@@ -118,7 +116,7 @@ func handleConnection(conn net.Conn) {
 	log.Println("host", host)
 	remote, err := net.Dial("tcp4", host)
 	if err != nil {
-		fmt.Println("can't connect to remote", err)
+		fmt.Println("can't connect to remote", err.Error())
 		return
 	}
 
