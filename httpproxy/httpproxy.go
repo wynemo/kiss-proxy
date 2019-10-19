@@ -14,12 +14,17 @@ import (
 )
 
 func main() {
+	argsWithProg := os.Args
 	var addr = "0.0.0.0:8118"
+	if len(argsWithProg) > 1 {
+		addr = argsWithProg[1]
+	}
 	l, err := net.Listen("tcp4", addr)
 	if err != nil {
 		fmt.Println("listen error", err.Error())
 		os.Exit(1)
 	}
+	fmt.Println("listen on", addr)
 	for {
 		conn, err := l.Accept()
 		if err != nil {
