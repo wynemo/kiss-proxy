@@ -4,16 +4,18 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"github.com/wynemo/kiss-proxy/util"
 	"log"
 	"net"
 	"net/url"
 	"os"
 	"strings"
+
+	"github.com/wynemo/kiss-proxy/util"
 )
 
 func main() {
-	l, err := net.Listen("tcp4", "0.0.0.0:8118")
+	var addr = "0.0.0.0:8118"
+	l, err := net.Listen("tcp4", addr)
 	if err != nil {
 		fmt.Println("listen error", err.Error())
 		os.Exit(1)
