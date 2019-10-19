@@ -29,15 +29,15 @@ func chanFromConn(conn net.Conn) chan []byte {
 }
 
 type Foo struct {
-	Data []byte
+	Data   []byte
 	Method string
-	Host string
+	Host   string
 }
 
 type change func(conn net.Conn, data []byte) (Foo, error)
 
 //Pipe pipe too connections
-func Pipe(conn1 net.Conn, conn2 net.Conn) []byte{
+func Pipe(conn1 net.Conn, conn2 net.Conn) []byte {
 	chan1 := chanFromConn(conn1)
 	chan2 := chanFromConn(conn2)
 	closed1 := false
@@ -67,7 +67,7 @@ func Pipe(conn1 net.Conn, conn2 net.Conn) []byte{
 }
 
 //Pipe pipe too connections
-func PipeAndChangeLater(conn1 net.Conn, conn2 net.Conn, fn change) []byte{
+func PipeAndChangeLater(conn1 net.Conn, conn2 net.Conn, fn change) []byte {
 	chan1 := chanFromConn(conn1)
 	chan2 := chanFromConn(conn2)
 	closed1 := false
@@ -89,7 +89,7 @@ func PipeAndChangeLater(conn1 net.Conn, conn2 net.Conn, fn change) []byte{
 				conn1.Close()
 				closed1 = true
 			} else {
-				if (connHasSent1) {
+				if connHasSent1 {
 					foo, err := fn(conn2, b2)
 					if err != nil {
 						conn2.Close()
