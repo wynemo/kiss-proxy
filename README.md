@@ -5,8 +5,9 @@ it supports [HTTP tunnel](https://en.wikipedia.org/wiki/HTTP_tunnel), and [HTTP 
 
 ```bash
 go get github.com/wynemo/kiss-proxy/httpproxy
-$GOPATH/bin/httpproxy &
-export http_proxy=http://127.0.0.1:8118
+$GOPATH/bin/httpproxy 0.0.0.0:7000&
+export http_proxy=http://127.0.0.1:7000
+export https_proxy=http://127.0.0.1:7000
 ```
 
 and run this in python REPL:
@@ -14,9 +15,8 @@ and run this in python REPL:
 ```python
 import requests
 session = requests.session()
-r = session.get('http://dabin.info/static/')
-r = session.get('http://dabin.info/')
-r = session.get('http://dabin.info/?page=2')
+r = session.get('http://baidu.com')
+r = session.get('https://douban.com')
 ```
 
 
