@@ -24,4 +24,5 @@ TODO: handle http 100 status
 
 
 ## compile locally
-go build httpproxy/httpproxy.go
+
+`go build -o output/httpproxy httpproxy/httpproxy.go`
