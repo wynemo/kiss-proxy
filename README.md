@@ -26,3 +26,8 @@ TODO: handle http 100 status
 ## compile locally
 
 `go build -o output/httpproxy httpproxy/httpproxy.go`
+
+## run it in docker
+
+`sudo docker run -d --restart always --name kiss-proxy -p 8118:8118 -v $PWD:/app -w /app debian:buster-slim ./output/httpproxy`
+
